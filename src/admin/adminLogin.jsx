@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminLogin } from "../api/adminApi";
 
@@ -8,16 +7,19 @@ function AdminLogin() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
-      const res = await adminLogin(form);
-      console.log(res); 
-       localStorage.setItem("adminToken", res.data.token);
-      navigate("/admin/dashboard");
+      const token = await adminLogin(form); 
+      if (token) {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        setError("Invalid credentials");
+      }
     } catch (err) {
       setError("Invalid credentials");
     }

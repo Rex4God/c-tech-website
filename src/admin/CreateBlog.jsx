@@ -1,16 +1,17 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 import { createBlog } from "../api/blogApi";
 import { useNavigate } from "react-router-dom";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Correct: imported AND used
 
 function CreateBlog() {
   const [form, setForm] = useState({ blogTitle: "", blogBody: "", author: "", date: "" });
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, files } = e.target as HTMLInputElement;
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
     if (name === "image" && files) {
       setImage(files[0]);
     } else {
@@ -18,7 +19,12 @@ function CreateBlog() {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  // Use this for ReactQuill
+  const handleBodyChange = (value) => {
+    setForm((prev) => ({ ...prev, blogBody: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!image) {
       setError("Image is required.");
@@ -26,7 +32,7 @@ function CreateBlog() {
     }
     const formData = new FormData();
     formData.append("blogTitle", form.blogTitle);
-    formData.append("blogBody", form.blogBody);
+    formData.append("blogBody", form.blogBody); // will be HTML from Quill
     formData.append("author", form.author);
     formData.append("date", form.date);
     formData.append("image", image);
@@ -65,14 +71,37 @@ function CreateBlog() {
           onChange={handleChange}
           required
         />
-        <textarea
-          name="blogBody"
-          placeholder="Blog Body"
-          rows={10}
-          value={form.blogBody}
-          onChange={handleChange}
-          required
-        />
+        <div style={{ marginBottom: 16 }}>
+          <ReactQuill
+            value={form.blogBody}
+            onChange={handleBodyChange}
+            placeholder="Blog Body"
+            modules={{
+              toolbar: [
+                [{ header: [1, 2, 3, false] }],
+                ["bold", "italic", "underline", "strike"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["blockquote", "code-block"],
+                ["link", "image"],
+                ["clean"],
+              ],
+            }}
+            formats={[
+              "header",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "list",
+              "bullet",
+              "blockquote",
+              "code-block",
+              "link",
+              "image",
+            ]}
+            style={{ height: 200, marginBottom: 20 }}
+          />
+        </div>
         <input
           type="date"
           name="date"
