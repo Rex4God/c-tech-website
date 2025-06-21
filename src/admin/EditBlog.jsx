@@ -1,48 +1,80 @@
 import { useState, useEffect } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 import { getBlogById, updateBlog } from "../api/blogApi";
 import { useParams, useNavigate } from "react-router-dom";
-import type { BlogType } from "../types/blog";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 function EditBlog() {
-  const { id } = useParams<{ id: string }>(); 
-  const [form, setForm] = useState({ blogTitle: "", blogBody: "", author: "", date: "" });
-  const [image, setImage] = useState<File | null>(null);
-  const [currentImage, setCurrentImage] = useState<string>("");
+  const { id } = useParams();
+  const [form, setForm] = useState({
+    blogTitle: "",
+    blogBody: "",
+    author: "",
+    date: "",
+  });
+  const [image, setImage] = useState(null);
+  const [currentImage, setCurrentImage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Fetch blog data on mount
   useEffect(() => {
     if (!id) {
       setError("Invalid blog ID.");
+      setLoading(false);
       return;
     }
+    setLoading(true);
     getBlogById(id)
-      .then((blog: BlogType) => {
+      .then((res) => {
+        // Support both direct and .data return
+        const blog = res?.data || res;
         setForm({
           blogTitle: blog.blogTitle || "",
           blogBody: blog.blogBody || "",
           author: blog.author || "",
-          date: blog.date ? new Date(blog.date).toISOString().substring(0, 10) : "",
+          date: blog.date
+            ? new Date(blog.date).toISOString().substring(0, 10)
+            : "",
         });
         setCurrentImage(blog.image || "");
+        setLoading(false);
       })
-      .catch(() => setError("Blog not found"));
+      .catch(() => {
+        setError("Blog not found");
+        setLoading(false);
+      });
   }, [id]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, files } = e.target as HTMLInputElement;
+  // Input change for normal fields and file
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
     if (name === "image" && files && files.length > 0) {
       setImage(files[0]);
     } else if (name !== "image") {
-      setForm({ ...form, [name]: value });
+      setForm((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  // For ReactQuill
+  const handleBodyChange = (value) => {
+    setForm((prev) => ({ ...prev, blogBody: value }));
+  };
+
+  // Submit updated data
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!id) {
       setError("Invalid blog ID.");
+      return;
+    }
+    if (!form.blogTitle || !form.author || !form.date) {
+      setError("Please fill all required fields.");
+      return;
+    }
+    if (!form.blogBody || form.blogBody === "<p><br></p>") {
+      setError("Blog body cannot be empty.");
       return;
     }
     const formData = new FormData();
@@ -53,13 +85,22 @@ function EditBlog() {
     if (image) {
       formData.append("image", image);
     }
+
     try {
       await updateBlog(id, formData);
-      navigate("/admin/blogs");
+      navigate("/admin/blog");
     } catch (err) {
       setError("Failed to update blog.");
     }
   };
+
+  if (loading) {
+    return (
+      <section>
+        <div>Loading...</div>
+      </section>
+    );
+  }
 
   if (error) {
     return (
@@ -88,7 +129,7 @@ function EditBlog() {
               src={currentImage}
               alt="Current"
               style={{ maxWidth: 200, marginBottom: 10 }}
-              onError={() => setCurrentImage("")} // Fallback if image URL is invalid
+              onError={() => setCurrentImage("")}
             />
           </div>
         )}
@@ -106,14 +147,37 @@ function EditBlog() {
           onChange={handleChange}
           required
         />
-        <textarea
-          name="blogBody"
-          placeholder="Blog Body"
-          rows={10}
-          value={form.blogBody}
-          onChange={handleChange}
-          required
-        />
+        <div style={{ marginBottom: 16 }}>
+          <ReactQuill
+            value={form.blogBody}
+            onChange={handleBodyChange}
+            placeholder="Blog Body"
+            modules={{
+              toolbar: [
+                [{ header: [1, 2, 3, false] }],
+                ["bold", "italic", "underline", "strike"],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["blockquote", "code-block"],
+                ["link", "image"],
+                ["clean"],
+              ],
+            }}
+            formats={[
+              "header",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "list",
+              "bullet",
+              "blockquote",
+              "code-block",
+              "link",
+              "image",
+            ]}
+            style={{ height: 200, marginBottom: 20 }}
+          />
+        </div>
         <input
           type="date"
           name="date"

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 import { createAdmin } from "../api/adminApi";
 import { useNavigate } from "react-router-dom";
 
@@ -8,10 +7,10 @@ function CreateAdmin() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await createAdmin(form);

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
 
 function Contact() {
   const [form, setForm] = useState({
@@ -9,40 +8,25 @@ function Contact() {
     email: "",
     message: "",
   });
-  const [sent, setSent] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    await fetch("https://formsubmit.co/ajax/ctechacademies@gmail.com", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        FirstName: form.firstName,
-        LastName: form.lastName,
-        PhoneNumber: form.phoneNumber,
-        email: form.email,
-        message: form.message,
-        _captcha: "false",
-      }),
-    });
-    setSent(true);
-    setForm({
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      email: "",
-      message: "",
-    });
   };
 
   return (
     <section id="contact">
       <h2>Contact Us</h2>
-      <form className="contact-form" onSubmit={handleSubmit}>
+      <form
+        className="contact-form"
+        action="https://formsubmit.co/ctechacademies@gmail.com"
+        method="POST"
+      >
+        {/* Prevent FormSubmit captcha */}
+        <input type="hidden" name="_captcha" value="false" />
+
+        {/* Optional: redirect to a thank-you page */}
+        {/* <input type="hidden" name="_next" value="https://yourdomain.com/thank-you" /> */}
+
         <input
           type="text"
           name="firstName"
@@ -60,7 +44,7 @@ function Contact() {
           onChange={handleChange}
         />
         <input
-          type="phone"
+          type="tel"
           name="phoneNumber"
           placeholder="Your Phone Number"
           value={form.phoneNumber}
@@ -77,13 +61,12 @@ function Contact() {
         <textarea
           name="message"
           placeholder="Your Message"
-          rows={5}
+          rows="5"
           required
           value={form.message}
           onChange={handleChange}
         />
         <button type="submit">Send Message</button>
-        {sent && <div style={{ color: "#0072ff", marginTop: 10 }}>Message sent successfully!</div>}
       </form>
     </section>
   );
