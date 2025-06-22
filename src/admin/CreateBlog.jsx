@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createBlog } from "../api/blogApi";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Correct: imported AND used
+import "react-quill/dist/quill.snow.css"; 
 
 function CreateBlog() {
   const [form, setForm] = useState({ blogTitle: "", blogBody: "", author: "", date: "" });
@@ -19,7 +19,6 @@ function CreateBlog() {
     }
   };
 
-  // Use this for ReactQuill
   const handleBodyChange = (value) => {
     setForm((prev) => ({ ...prev, blogBody: value }));
   };
