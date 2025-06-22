@@ -16,16 +16,13 @@ function Contact() {
   return (
     <section id="contact">
       <h2>Contact Us</h2>
+
       <form
         className="contact-form"
-        action="https://formsubmit.co/ctechacademies@gmail.com"
+        action="https://getform.io/f/bpjprvrb"
         method="POST"
       >
-        {/* Prevent FormSubmit captcha */}
-        <input type="hidden" name="_captcha" value="false" />
-
-        {/* Optional: redirect to a thank-you page */}
-        {/* <input type="hidden" name="_next" value="https://yourdomain.com/thank-you" /> */}
+        <input type="hidden" name="_gotcha" style={{ display: "none" }} />
 
         <input
           type="text"

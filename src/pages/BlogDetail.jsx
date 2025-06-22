@@ -61,7 +61,7 @@ function BlogDetail() {
   const shareOnFacebook = (e) => {
     e.stopPropagation();
     window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent()}`,
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(blogUrl)}&text=${encodeURIComponent(blog.blogTitle)}`,
       "_blank",
       "noopener,noreferrer"
     );

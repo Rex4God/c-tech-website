@@ -4,7 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 
 export const adminLogin = async ({ email, password }) => {
-  const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+  const res = await axios.post(`${API_URL}/v1/auth/login`, { email, password });
 
   const token = res.data?.data?.token;
   if (token) {
@@ -20,7 +20,7 @@ export const adminLogin = async ({ email, password }) => {
 export const createAdmin = async ({ firstName, lastName, phoneNumber, email, password }) => {
   const token = localStorage.getItem("adminToken");
   const res = await axios.post(
-    `${API_URL}/auth/create-user`,
+    `${API_URL}/v1/auth/create-user`,
     { firstName, lastName, phoneNumber, email, password },
     {
       headers: { Authorization: `Bearer ${token}` },
