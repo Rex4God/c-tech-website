@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getBlogById } from "../api/blogApi";
-import DOMPurify from "dompurify"; // <-- Import DOMPurify for safe HTML rendering
-
-// SVG icon components for social media
+import DOMPurify from "dompurify"; 
 const IconFacebook = () => (
   <svg width="28" height="28" fill="#1877F3" viewBox="0 0 24 24">
     <path d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.406.595 24 1.326 24h11.495v-9.294H9.691V11.01h3.13V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.312h3.587l-.467 3.696h-3.12V24h6.116c.73 0 1.324-.594 1.324-1.326V1.326C24 .592 23.405 0 22.675 0"/>
@@ -63,7 +61,7 @@ function BlogDetail() {
   const shareOnFacebook = (e) => {
     e.stopPropagation();
     window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(blogUrl)}`,
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent()}`,
       "_blank",
       "noopener,noreferrer"
     );
@@ -75,7 +73,7 @@ function BlogDetail() {
       "_blank",
       "noopener,noreferrer"
     );
-  };
+  };blogUrl
   const shareOnTikTok = (e) => {
     e.stopPropagation();
     window.open("https://www.tiktok.com/upload", "_blank", "noopener,noreferrer");

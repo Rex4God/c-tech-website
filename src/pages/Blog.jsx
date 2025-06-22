@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllBlogs } from "../api/blogApi";
-
-// To properly parse blog HTML and get plain text for preview, use DOMPurify + a temporary element
 import DOMPurify from "dompurify";
 
 function getPlainTextFromHTML(html, maxLength = 100) {
-  // Sanitize the HTML to remove scripts, then extract text content
   const clean = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
   return clean.length > maxLength ? clean.slice(0, maxLength) + "..." : clean;
 }
@@ -64,7 +61,7 @@ function Blog() {
                   {getPlainTextFromHTML(blog.blogBody, 100)}
                 </p>
                 <p style={{ fontSize: "13px", color: "#888", margin: "10px 0" }}>
-                  {blog.date ? new Date(blog.date).toLocaleDateString() : ""} · {blog.readTime || "5"} min read
+                  {blog.date ? new Date(blog.date).toLocaleDateString() : ""} · {blog.readTime || "9"} min read
                 </p>
                 <Link to={`/blog/${blog._id || blog.id}`} style={{ color: "blue", fontWeight: "bold", textDecoration: "none" }}>
                   Read more ...
