@@ -8,7 +8,7 @@ import Courses from "./pages/Courses";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
-import AdminLogin from "./admin/AdminLogin";
+import AdminLogin from "./admin/adminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminBlogs from "./admin/AdminBlogs";
 import CreateBlog from "./admin/CreateBlog";
