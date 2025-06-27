@@ -132,8 +132,8 @@ function BlogDetail() {
             alt={blog.blogTitle}
             style={{
               width: "100%",
-              maxHeight: "200px",
-              objectFit: "cover",
+              maxHeight: "500px",
+              objectFit: "revert",
               borderRadius: "5px",
             }}
             onError={(e) => (e.currentTarget.style.display = "none")}
