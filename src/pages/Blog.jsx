@@ -50,7 +50,7 @@ function Blog() {
                 <img
                   src={blog.image}
                   alt={blog.blogTitle}
-                  style={{ width: "100%", height: "180px", objectFit: "cover" }}
+                  style={{ width: "100%", height: "180px", objectFit: "initial" }}
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
               )}
@@ -58,7 +58,7 @@ function Blog() {
               <div style={{ padding: "15px", flex: 1 }}>
                 <h4 style={{ fontSize: "18px", margin: "0 0 10px" }}>{blog.blogTitle}</h4>
                 <p style={{ fontSize: "14px", color: "#555" }}>
-                  {getPlainTextFromHTML(blog.blogBody, 100)}
+                  {getPlainTextFromHTML(blog.blogBody, 80)}
                 </p>
                 <p style={{ fontSize: "13px", color: "#888", margin: "10px 0" }}>
                   {blog.date ? new Date(blog.date).toLocaleDateString() : ""} · {blog.readTime || "9"} min read
