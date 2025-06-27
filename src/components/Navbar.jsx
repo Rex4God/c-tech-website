@@ -26,7 +26,7 @@ function Navbar() {
         <Link to="/about">About Us</Link>
         <Link to="/courses">Courses</Link>
         <Link to="/contact">Contact</Link>
-        <Link to="/blog">Blog</Link>
+        <Link to="/blog">Blogs</Link>
         <Link to="/faq">FAQ</Link>
         {/* <Link to="/admin/login" style={{ color: "#0072ff" }}>
           Admin
